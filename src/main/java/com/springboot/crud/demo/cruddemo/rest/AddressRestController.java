@@ -2,6 +2,8 @@ package com.springboot.crud.demo.cruddemo.rest;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,7 @@ import com.springboot.crud.demo.cruddemo.service.AddressService;
 public class AddressRestController {
 
 	private AddressService addressService;
+	Logger logger = LoggerFactory.getLogger(AddressRestController.class);
 	
 	@Autowired
 	public AddressRestController(AddressService addressService) {
@@ -34,6 +37,7 @@ public class AddressRestController {
 	
 	@GetMapping("/people/{id}/addresses/{addressId}")
 	public Address findAddressById(@PathVariable Integer id, @PathVariable Integer addressId) {
+		logger.info("Inside findAddressById method");
 		Address address = addressService.findAddressById(id, addressId);
 		if(address == null) {
 			throw new RuntimeException("Address id not found - " + id);
