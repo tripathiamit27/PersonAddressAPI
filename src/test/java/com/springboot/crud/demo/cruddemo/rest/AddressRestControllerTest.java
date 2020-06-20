@@ -1,9 +1,9 @@
 package com.springboot.crud.demo.cruddemo.rest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,13 +22,12 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.springboot.crud.demo.cruddemo.entity.Address;
 import com.springboot.crud.demo.cruddemo.entity.Person;
-import com.springboot.crud.demo.cruddemo.service.PersonService;
-
-
+import com.springboot.crud.demo.cruddemo.service.AddressService;
 
 @SpringBootTest
-public class PersonRestControllerTest{
+public class AddressRestControllerTest {
 
 	@Autowired
 	  private WebApplicationContext webApplicationContext;
@@ -36,64 +35,85 @@ public class PersonRestControllerTest{
 	
 	@Autowired
 	@MockBean
-	private PersonService service;
-	
+	private AddressService service;
 	
 	@Test
-	public void findPeopleSuccess()
+	public void findAddressSuccess()
 	  throws Exception {
+		Address address = new Address();
+		address.setCity("Hyderabad");
+		address.setPostalCode("500088");
+		address.setState("TEL");
+		address.setStreet("10 Downing");
+		address.setId(1);
 		Person person = new Person("Alex", "Thomas");
 		person.setId(1);
+		address.setPerson(person);
+		List<Address> addressList = new ArrayList<> ();
+		addressList.add(address);
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 		 
-	    List<Person> allEmployees = new ArrayList<Person>();
-	    allEmployees.add(person);
 	 
-	    given(service.findAll()).willReturn(allEmployees);
+	    given(service.findAll(1)).willReturn(addressList);
 	 
-	    mockMvc.perform(get("/api/people")
+	    mockMvc.perform(get("/api/people/1/addresses")
 	      .contentType(MediaType.APPLICATION_JSON))
 	      .andExpect(status().isOk())
 	      .andExpect(jsonPath("$", hasSize(1)))
-	      .andExpect(jsonPath("$[0].firstName", is(person.getFirstName())));
+	      .andExpect(jsonPath("$[0].city", is(address.getCity())));
 	    
 	}
 	
 	@Test
-	public void findPersonByIdSuccess()
+	public void findAddressByIdSuccess()
 	  throws Exception {
+		Address address = new Address();
+		address.setCity("Hyderabad");
+		address.setPostalCode("500088");
+		address.setState("TEL");
+		address.setStreet("10 Downing");
+		address.setId(1);
 		Person person = new Person("Alex", "Thomas");
 		person.setId(1);
+		address.setPerson(person);
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 		 
-	    given(service.findPersonById(1)).willReturn(person);
+	    given(service.findAddressById(1, 1)).willReturn(address);
 	 
-	    mockMvc.perform(get("/api/people/1")
+	    mockMvc.perform(get("/api/people/1/addresses/1")
 	      .contentType(MediaType.APPLICATION_JSON))
 	      .andExpect(status().isOk())
-	      .andExpect(jsonPath("$.firstName", is(person.getFirstName())));
+	      .andExpect(jsonPath("$.state", is(address.getState())));
 	    
 	}
 	
 	@Test
-	public void findPersonByIdFailure()
+	public void findAddressByIdFailure()
 	  throws Exception {
+		Address address = new Address();
+		address.setCity("Hyderabad");
+		address.setPostalCode("500088");
+		address.setState("TEL");
+		address.setStreet("10 Downing");
+		address.setId(1);
 		Person person = new Person("Alex", "Thomas");
 		person.setId(1);
+		address.setPerson(person);
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 		 
-	    //given(service.findPersonById(2)).willThrow(new RuntimeException("Person id not found - " + 2));
+	    
 	 
-	    MvcResult mvcResult = mockMvc.perform(get("/api/people/2")
+	    MvcResult mvcResult = mockMvc.perform(get("/api/people/1/addresses/2")
 	  	      .contentType(MediaType.TEXT_PLAIN))
-	  	      //.andExpect(new RuntimeException("Person id not found - " + 2))
 	  	      .andReturn();
 	  	      
-	  	    String expectedErrorResponse = new String("Person not found for Person Id : " + 2);
+	  	    String expectedErrorResponse = new String("Address not found for Person Id : 1");
 	  	    String actualResponseBody = mvcResult.getResponse().getContentAsString();
 	  	        mvcResult.getResponse().getContentAsString();
 	  	    String expectedResponseBody = expectedErrorResponse;
 	  	        assertThat(expectedResponseBody, containsString(actualResponseBody));
 
 }
+
+
 }

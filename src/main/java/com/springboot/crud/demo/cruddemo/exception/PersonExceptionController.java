@@ -17,8 +17,8 @@ public class PersonExceptionController {
 		return new ResponseEntity<>("Person not found for Person Id : " + perException.getId(), HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(Exception.class)
+	/*@ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handlePostExceptions(Exception ex) {
         return new ResponseEntity("Id cannot be null", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    }*/
 }

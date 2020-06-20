@@ -50,7 +50,7 @@ public class PersonRestController {
 	}
 	
 	@PostMapping("/people")
-	public Person addPerson(@Validated @RequestBody Person person) {
+	public Person addPerson( @RequestBody Person person) {
 		//employee.setId(new Integer(0));
 		personService.addPerson(person);
 		return person;

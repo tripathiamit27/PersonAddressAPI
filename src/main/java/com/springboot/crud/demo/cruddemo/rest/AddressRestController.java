@@ -56,7 +56,7 @@ public class AddressRestController {
 	}
 	
 	@PutMapping("/people/{id}/addresses/{addressId}")
-	public Address updatePerson(@PathVariable Integer id, @PathVariable Integer addressId, @RequestBody Address address) {
+	public Address updateAddress(@PathVariable Integer id, @PathVariable Integer addressId, @RequestBody Address address) {
 		Address addressToUpdate = addressService.findByIdAndPersonId(addressId, id);
 		if(addressToUpdate == null) {
 			throw new AddressNotFoundException(id.toString());
